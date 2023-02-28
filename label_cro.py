@@ -5,6 +5,10 @@ import uuid
 import streamlit as st
 
 
+val = """\
+angulation_tige\
+"""
+
 def get_files():
     found = False
     while not found:
