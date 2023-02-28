@@ -28,7 +28,7 @@ def main():
         st.error("I didn't find the configuration file schema.txt")
         time.sleep(3.)
         exit()
-    if 'xac_cro_dataset-anonyme.jsonl' not in files:
+    if 'xac_cro_dataset_anonyme.jsonl' not in files:
         st.error("I didn't find the dataset dataset.jsonl.")
         time.sleep(3.)
         exit()
@@ -47,7 +47,7 @@ def main():
 
     # LOAD THE DATASET
     if 'dataset_modified.jsonl' not in files:
-        dics = [json.loads(x) for x in open(os.path.join(val, 'xac_cro_dataset-anonyme.jsonl'), 'r', encoding='utf-8').read().split('\n') if len(x)>0]
+        dics = [json.loads(x) for x in open(os.path.join(val, 'xac_cro_dataset_anonyme.jsonl'), 'r', encoding='utf-8').read().split('\n') if len(x)>0]
         for i, dic in enumerate(dics):
             dics[i]['id'] = str(uuid.uuid4())
         with open(os.path.join(val, 'dataset_modified.jsonl'), 'w', encoding='utf-8') as f:
