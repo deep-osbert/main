@@ -62,9 +62,6 @@ def main():
     st.success(f"Setup completed in {elapsed_time_all:.2f} seconds.")
 
 
-if __name__ == "__main__":
-    main()
-
 # LOAD THE CORRECT DATASET
 dics = [json.loads(x) for x in open(os.path.join(val, 'dataset_modified.jsonl'), 'r', encoding='utf-8').read().split('\n') if len(x) > 0]
 
