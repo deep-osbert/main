@@ -28,7 +28,7 @@ def main():
         st.error("I didn't find the configuration file schema.txt")
         time.sleep(3.)
         exit()
-    if 'xac_cro_dataset.jsonl' not in files:
+    if 'xac_cro_dataset-anonyme.jsonl' not in files:
         st.error("I didn't find the dataset dataset.jsonl.")
         time.sleep(3.)
         exit()
@@ -47,7 +47,7 @@ def main():
 
     # LOAD THE DATASET
     if 'dataset_modified.jsonl' not in files:
-        dics = [json.loads(x) for x in open(os.path.join(val, 'xac_cro_dataset.jsonl'), 'r', encoding='utf-8').read().split('\n') if len(x)>0]
+        dics = [json.loads(x) for x in open(os.path.join(val, 'xac_cro_dataset-anonyme.jsonl'), 'r', encoding='utf-8').read().split('\n') if len(x)>0]
         for i, dic in enumerate(dics):
             dics[i]['id'] = str(uuid.uuid4())
         with open(os.path.join(val, 'dataset_modified.jsonl'), 'w', encoding='utf-8') as f:
@@ -70,7 +70,7 @@ dics = [json.loads(x) for x in open(os.path.join(val, 'dataset_modified.jsonl'),
 
 id_annotation = ""
 while len(id_annotation) == 0:
-    id_annotation = st.text_input("Enter the name of the outcome you will label, without spaces or tabs:", value='').replace(' ', '_').replace('/', '_').replace('\\', '_').replace('-', '_')
+    id_annotation = st.text_input("Enter your last name without spaces or tabs:", value='').replace(' ', '_').replace('/', '_').replace('\\', '_').replace('-', '_')
 
     def highlight_text(text, highlighted_words):
         """Returns the input text with the highlighted words highlighted using ANSI escape codes"""
