@@ -38,16 +38,7 @@ def main():
         exit()
 
     # LOAD THE CONFIG
-    X = [[_ for _ in x.split(' ') if len(_)>0] for x in open(os.path.join(val, 'schema.txt'), 'r', encoding='utf-8').read().split('\n') if len(x)>0]
-    X = [a for a in X if len(a)>0]
-    X = {x[0]:x[1] for x in X}
-    st.write("Loaded configuration:")
-    st.write(X)
-
-    assert 'TYPE' in X
-    assert X['TYPE'] in {'num', 'class'}
-    for _, __ in X.items():
-        assert __ != 'R'
+    X = 'num'
 
     # LOAD THE DATASET
     if 'dataset_modified.jsonl' not in files:
@@ -82,47 +73,6 @@ while len(id_annotation) == 0:
     # Prompt user to enter highlighted words
     highlighted_words = st.text_input("Enter highlighted words separated by a space:").split()
 
-    if X['TYPE'] == 'class':
-        classes = [x for x in list(X.keys()) if x != 'TYPE']
-        hotkeys = [X[k] for k in classes]
-        possible_hotkeys = set(hotkeys + ['R'])
-        file_to_write = os.path.join(val, 'annotations')
-        file_to_write_timelog = os.path.join(val, 'timelog')
-        rules = "KEYS : R = RETURN (go back to precedent text) | "
-        for h, k in zip(classes, hotkeys):
-            rules += k + " = " + h.upper() + "| "
-        annotated = [x.split('\t') for x in open(file_to_write, 'r', encoding='utf-8').read().split('\n') if len(x) > 0]
-        annotated = set([x[0] for x in annotated if x[1] == id_annotation])
-        st.write("You have already annotated {} documents.".format(len(annotated)))
-        dics = [x for x in dics if x['id'] not in annotated]
-        time.sleep(1.)
-
-        i = 0
-        while i < len(dics):
-            st.text("Text {a}/{b}".format(a=i + 1, b=len(dics)))
-            st.text(rules)
-            st.write('#####################################################')
-            highlighted_text = highlight_text(dics[i]['text'], highlighted_words)
-            st.markdown(highlighted_text, unsafe_allow_html=True)
-            st.write('#####################################################')
-            R = st.text_input("Enter your annotation (press 'R' to go back):")
-
-            if R not in possible_hotkeys:
-                continue
-            elif R == 'R':
-                if i > 0:
-                    i -= 1
-                continue
-            else:
-                open(file_to_write, 'a', encoding='utf-8').write(
-                    "{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dics[i]['id'], _id_annotation=id_annotation,
-                                                                      _annotation=R))
-            with open(file_to_write_timelog, 'a', encoding='utf-8') as f:
-                f.write(
-                    "{_time}\t{_id_annotation}\t{_annotation}\t{_elapsed_time}\t{_elapsed_time_all}\n".format(
-                        _time=time.time(), _id_annotation=id_annotation, _annotation=R, _elapsed_time=elapsed_time,
-                        _elapsed_time_all=elapsed_time_all))
-            i += 1
 
 # Main function to annotate numeric questions
 def annotate_numeric_questions(X, dics, id_annotation, val, start_time, elapsed_time_all):
