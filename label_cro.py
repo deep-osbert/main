@@ -62,7 +62,7 @@ dics = [json.loads(x) for x in open(os.path.join(val, 'dataset_modified.jsonl'),
 
 id_annotation = ""
 while len(id_annotation) == 0:
-    id_annotation = st.text_input_lastname("Enter your last name without spaces or tabs:", value='').replace(' ', '_').replace('/', '_').replace('\\', '_').replace('-', '_')
+    id_annotation = st.text_input("Enter your last name without spaces or tabs:", value='').replace(' ', '_').replace('/', '_').replace('\\', '_').replace('-', '_')
 
     def highlight_text(text, highlighted_words):
         """Returns the input text with the highlighted words highlighted using ANSI escape codes"""
