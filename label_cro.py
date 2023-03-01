@@ -62,7 +62,7 @@ dics = [json.loads(x) for x in open(os.path.join(val, 'dataset_modified.jsonl'),
 
 id_annotation = ""
 while len(id_annotation) == 0:
-    id_annotation = st.text_input("Enter your last name without spaces or tabs:", value='').replace(' ', '_').replace('/', '_').replace('\\', '_').replace('-', '_')
+    id_annotation = st.text_input_lastname("Enter your last name without spaces or tabs:", value='').replace(' ', '_').replace('/', '_').replace('\\', '_').replace('-', '_')
 
     def highlight_text(text, highlighted_words):
         """Returns the input text with the highlighted words highlighted using ANSI escape codes"""
@@ -71,7 +71,7 @@ while len(id_annotation) == 0:
         return text
 
     # Prompt user to enter highlighted words
-    highlighted_words = st.text_input("Enter highlighted words separated by a space:").split()
+    highlighted_words = st.text_input_surlignage("Enter highlighted words separated by a space:").split()
 
 
 # Main function to annotate numeric questions
@@ -97,7 +97,7 @@ def annotate_numeric_questions(X, dics, id_annotation, val, start_time, elapsed_
         highlighted_text = highlight_text(dics[i]['text'], X['highlighted_words'])
         st.markdown(highlighted_text, unsafe_allow_html=True)
         st.markdown('---')
-        R = st.text_input("Your answer:")
+        R = st.text_input_answer("Your answer:")
         if R == 'R':
             if i > 0:
                 i -= 1
