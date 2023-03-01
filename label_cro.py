@@ -71,7 +71,7 @@ while len(id_annotation) == 0:
         return text
 
     # Prompt user to enter highlighted words
-    highlighted_words = st.text_input_surlignage("Enter highlighted words separated by a space:").split()
+    highlighted_words = st.text_input("Enter highlighted words separated by a space:").split()
 
 
 # Main function to annotate numeric questions
