@@ -63,22 +63,22 @@ def get_files():
     found = False
     while not found:
         files = os.listdir()
-        val = input("Enter the name of your annotation folder (folder name with the config): ")
+        val = st.text_input("Enter the name of your annotation folder (folder name with the config): ")
         if val in files:
             found = True
         else:
-            print("I didn't find a folder with such a name, sorry")
+            st.write("I didn't find a folder with such a name, sorry")
     return val
 
 # VAL CORRESPONDS TO FOLDER NAME
 val = get_files()
 files = os.listdir(val)
 if 'schema.txt' not in files:
-    print("I didn't find the configuration file schema.txt")
+    st.write("I didn't find the configuration file schema.txt")
     time.sleep(3.)
     exit()
 if 'dataset.jsonl' not in files:
-    print("I didn't find the dataset dataset.jsonl.")
+    st.write("I didn't find the dataset dataset.jsonl.")
     time.sleep(3.)
     exit()
 
@@ -86,7 +86,7 @@ if 'dataset.jsonl' not in files:
 X = [[_ for _ in x.split(' ') if len(_)>0] for x in open(os.path.join(val, 'schema.txt'), 'r', encoding = 'utf-8').read().split('\n') if len(x)>0] 
 X = [a for a in X if len(a)>0]
 X = {x[0]:x[1] for x in X}
-print(X)
+st.write(X)
 
 assert 'TYPE' in X
 assert X['TYPE'] in {'num', 'class'}
@@ -111,17 +111,17 @@ dics = [json.loads(x) for x in open(os.path.join(val, 'dataset_modified.jsonl'),
 
 id_annotation = ""
 while len(id_annotation)==0:
-    print("Enter the name of the outcome you will label, without spaces or tabs:")
-    id_annotation = input().replace(' ', '_').replace('/', '_').replace('\\', '_').replace('-', '_')
+    st.write("Enter the name of the outcome you will label, without spaces or tabs:")
+    id_annotation = st.text_input().replace(' ', '_').replace('/', '_').replace('\\', '_').replace('-', '_')
     
     def highlight_text(text, highlighted_words):
-        """Returns the input text with the highlighted words highlighted using ANSI escape codes"""
+        """Returns the st.text_input text with the highlighted words highlighted using ANSI escape codes"""
         for word in highlighted_words:
             text = text.replace(word, "\033[1;31m{}\033[0m".format(word))
         return text
     
 # Prompt user to enter highlighted words
-highlighted_words = input("Enter highlighted words separated by a space: ").split()
+highlighted_words = st.text_input("Enter highlighted words separated by a space: ").split()
 
 
 if X['TYPE']=='class':
@@ -135,7 +135,7 @@ if X['TYPE']=='class':
         rules += k + " = " + h.upper() + "| "
     annotated = [x.split('\t') for x in open(file_to_write, 'r', encoding = 'utf-8').read().split('\n') if len(x)>0]
     annotated = set([x[0] for x in annotated if x[1]==id_annotation])
-    print("You have already annotated {} documents.".format(len(annotated)))
+    st.write("You have already annotated {} documents.".format(len(annotated)))
     dics = [x for x in dics if x['id'] not in annotated]
     time.sleep(1.)
 
@@ -145,14 +145,14 @@ if X['TYPE']=='class':
         os.system('clear')
         elapsed_time = time.time() - start_time
         elapsed_time_all += elapsed_time
-        print("Text {a}/{b}".format(a=i + 1, b=len(dics)))
-        print(rules)
-        print('#####################################################')
+        st.write("Text {a}/{b}".format(a=i + 1, b=len(dics)))
+        st.write(rules)
+        st.write('#####################################################')
         highlighted_text = highlight_text(dics[i]['text'], highlighted_words)
-        print(highlighted_text)
-        print('#####################################################')
+        st.write(highlighted_text)
+        st.write('#####################################################')
         start_time = time.time()
-        R = input("Enter your annotation (press 'R' to go back): ")
+        R = st.text_input("Enter your annotation (press 'R' to go back): ")
 
 
         if R not in possible_hotkeys:
@@ -176,7 +176,7 @@ elif X['TYPE'] == 'num':
     rules = "R for RETURN (go back to precedent text), N for None (if the answer is not in the text), or numeric answer"
     annotated = [x.split('\t') for x in open(file_to_write_annotations, 'r', encoding = 'utf-8').read().split('\n') if len(x) > 0]
     annotated = set([x[0] for x in annotated if x[1] == id_annotation])
-    print("You have already annotated {} documents.".format(len(annotated)))
+    st.write("You have already annotated {} documents.".format(len(annotated)))
     dics = [x for x in dics if x['id'] not in annotated]
     time.sleep(1.)
 
@@ -185,14 +185,14 @@ elif X['TYPE'] == 'num':
         os.system('cls')
         elapsed_time = time.time() - start_time
         elapsed_time_all += elapsed_time
-        print("Text {a}/{b}".format(a=i, b=len(dics)))
-        print(rules)
-        print('#####################################################')
+        st.write("Text {a}/{b}".format(a=i, b=len(dics)))
+        st.write(rules)
+        st.write('#####################################################')
         highlighted_text = highlight_text(dics[i]['text'], highlighted_words)
-        print(highlighted_text)
-        print('#####################################################')
+        st.write(highlighted_text)
+        st.write('#####################################################')
         start_time = time.time()
-        R = input()
+        R = st.text_input()
         if R == 'R':
             if i > 0:
                 i -= 1
@@ -213,7 +213,7 @@ elif X['TYPE'] == 'num':
 
 os.system('clear')
 
-print("Annotation terminée, merci de renvoyer l'ensemble du dossier pour évaluation.")
+st.write("Annotation terminée, merci de renvoyer l'ensemble du dossier pour évaluation.")
         
 
 # Add progress indicators and visualizations as needed
