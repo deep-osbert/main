@@ -23,16 +23,15 @@ st.title("Annotation Tool")
 val = st.text_input("Enter the name of your annotation folder (folder name with the config):")
 
 if val:
-    in files:
     found = True
-        else:
+else:
             st.write("I didn't find a folder with such a name, sorry")
-    return val
+return val
 
-    id_annotation = st.text_input("Enter the name of the outcome you will label, without spaces or tabs:")
+id_annotation = st.text_input("Enter the name of the outcome you will label, without spaces or tabs:")
 
-    if id_annotation:
-        while len(id_annotation)==0:
+if id_annotation:
+    while len(id_annotation)==0:
             st.write("Enter the name of the outcome you will label, without spaces or tabs:")            
             def highlight_text(text, highlighted_words):
                 """Returns the st.text_input text with the highlighted words highlighted using ANSI escape codes"""
@@ -40,9 +39,9 @@ if val:
                     text = text.replace(word, "\033[1;31m{}\033[0m".format(word))
                 return text
 
-        highlighted_words = st.text_input("Enter highlighted words separated by a space: ").split()
+highlighted_words = st.text_input("Enter highlighted words separated by a space: ").split()
 
-        if X['TYPE'] == 'class':
+if X['TYPE'] == 'class':
             classes = [x for x in list(X.keys()) if x != 'TYPE']
             hotkeys = [X[k] for k in classes]
             possible_hotkeys = set(hotkeys+['R'])
@@ -89,7 +88,7 @@ if val:
 
             
 
-        elif X['TYPE'] == 'num':
+elif X['TYPE'] == 'num':
             file_to_write_annotations = os.path.join(val, 'annotations')
             file_to_write_timelog = os.path.join(val, 'timelog')
             rules = "R for RETURN (go back to precedent text), N for None (if the answer is not in the text), or numeric answer"
@@ -130,8 +129,12 @@ if val:
                
 
 
-        os.system('clear')
-
-        st.write("Annotation terminée, merci de renvoyer l'ensemble du dossier pour évaluation.")
+os.system('clear')
+    st.write("Annotation terminée, merci de renvoyer l'ensemble du dossier pour évaluation.")
  
+
+
+
+
+
 
