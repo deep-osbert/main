@@ -37,7 +37,8 @@ id_annotation = st.text_input("Enter the name of the outcome you will label, wit
 highlighted_words = st.text_input("Enter highlighted words separated by a space: ").split()
 
 # Load the config file
-if found:
+if val:
+    found = True
     try:
         with open(os.path.join(val, 'config.json'), 'r') as f:
             X = json.load(f)
