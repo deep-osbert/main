@@ -82,7 +82,6 @@ if X and dics and 'TYPE' in X:
 
         i = 0
         while i < len(dics):
-            os.system('clear')
             elapsed_time = time.time() - start_time
             elapsed_time_all += elapsed_time
             st.write("Text {a}/{b}".format(a=i + 1, b=len(dics)))
