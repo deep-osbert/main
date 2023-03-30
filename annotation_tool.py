@@ -4,11 +4,8 @@ import json
 import uuid
 import streamlit as st
 
-
-
 start_time = time.time()
 elapsed_time_all = 0
-
 
 def get_files():
     found = False
@@ -45,15 +42,17 @@ if val:
     except FileNotFoundError:
         st.write("Couldn't find a config file in the specified folder.")
         X = None
-        
+else:
+    X = None
+
 # LOAD CONFIGURATION DATA
-    if val:
-        X = [[_ for _ in x.split(' ') if len(_)>0] for x in open(os.path.join(val, 'schema.txt'), 'r', encoding = 'utf-8').read().split('\n') if len(x)>0]
-        X = [a for a in X if len(a)>0]
-        X = {x[0]:x[1] for x in X}
-        st.write(X)
-    else:
-        st.write("Please enter a valid folder name.")
+if val:
+    X = [[_ for _ in x.split(' ') if len(_)>0] for x in open(os.path.join(val, 'schema.txt'), 'r', encoding = 'utf-8').read().split('\n') if len(x)>0]
+    X = [a for a in X if len(a)>0]
+    X = {x[0]:x[1] for x in X}
+    st.write(X)
+else:
+    st.write("Please enter a valid folder name.")
 
 # Load the dataset
 if X and 'TYPE' in X:
