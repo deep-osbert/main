@@ -92,7 +92,7 @@ if X and dics and 'TYPE' in X:
             st.write(highlighted_text)
             st.write('#####################################################')
             start_time = time.time()
-            R = st.text_input("Enter your annotation (press 'R' to go back): ")
+            R = st.text_input("Enter your annotation (press 'R' to go back): ", key=f"annotation_input_{i}")
 
 
             if R not in possible_hotkeys:
@@ -131,7 +131,7 @@ if X and dics and 'TYPE' in X:
             st.write(highlighted_text)
             st.write('#####################################################')
             start_time = time.time()
-            R = st.text_input("Enter your annotation (press 'R' to go back): ")
+            R = st.text_input("Enter your annotation (press 'R' to go back): ", key=f"annotation_input_{i}")
             if R == 'R':
                 if i > 0:
                     i -= 1
