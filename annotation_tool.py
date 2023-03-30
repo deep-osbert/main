@@ -93,20 +93,17 @@ if X and dics and 'TYPE' in X:
             st.write('#####################################################')
             start_time = time.time()
             R = st.text_input("Enter your annotation (press 'R' to go back): ", key=f"annotation_input_{i}")
-
-
             if R not in possible_hotkeys:
                 continue
             elif R == 'R':
                 if i > 0:
                     i -= 1
+                open(file_to_write, 'a', encoding='utf-8').write(
+                    "{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dics[i]['id'], _id_annotation=id_annotation, _annotation=R))
                 continue
             else:
                 open(file_to_write, 'a', encoding='utf-8').write(
                     "{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dics[i]['id'], _id_annotation=id_annotation, _annotation=R))
-            with open(file_to_write_timelog, 'a', encoding='utf-8') as f:
-                f.write(
-                    "{_time}\t{_id_annotation}\t{_annotation}\t{_elapsed_time}\t{_elapsed_time_all}\n".format(_time=time.time(), _id_annotation=id_annotation, _annotation=R, _elapsed_time=elapsed_time, _elapsed_time_all=elapsed_time_all))
             i += 1
             
     elif X['TYPE'] == 'num':
@@ -135,6 +132,8 @@ if X and dics and 'TYPE' in X:
             if R == 'R':
                 if i > 0:
                     i -= 1
+                open(file_to_write_annotations, 'a', encoding='utf-8').write(
+                    "{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dics[i]['id'], _id_annotation=id_annotation, _annotation=R))
                 continue
             if R != 'N':
                 try:
@@ -143,9 +142,6 @@ if X and dics and 'TYPE' in X:
                     continue
             with open(file_to_write_annotations, 'a', encoding='utf-8') as f:
                 f.write("{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dics[i]['id'], _id_annotation=id_annotation, _annotation=R))
-            with open(file_to_write_timelog, 'a', encoding='utf-8') as f:
-                f.write(
-                    "{_time}\t{_id_annotation}\t{_annotation}\t{_elapsed_time}\t{_elapsed_time_all}\n".format(_time=time.time(), _id_annotation=id_annotation, _annotation=R, _elapsed_time=elapsed_time, _elapsed_time_all=elapsed_time_all))
             i += 1
             
 else:
