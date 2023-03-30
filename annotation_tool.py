@@ -13,29 +13,26 @@ def get_files():
         files = os.listdir()
 
 def highlight_text(text, highlighted_words):
-    """Returns the st.text_input text with the highlighted words highlighted using ANSI escape codes"""
     for word in highlighted_words:
-        text = text.replace(word, "\033[1;31m{}\033[0m".format(word))
+        text = text.replace(word, f"\033[1;31m{word}\033[0m")
     return text
 
 # Streamlit code starts here
 st.title("Annotation Tool")
 
-# VAL CORRESPONDS TO FOLDER NAME
 val = st.text_input("Enter the name of your annotation folder (folder name with the config):")
+id_annotation = st.text_input("Enter the name of the outcome you will label, without spaces or tabs:")
+highlighted_words = st.text_input("Enter highlighted words separated by a space: ").split()
 
 if val:
     found = True
 else:
     st.write("I didn't find a folder with such a name, sorry")
 
-id_annotation = st.text_input("Enter the name of the outcome you will label, without spaces or tabs:")
-
-highlighted_words = st.text_input("Enter highlighted words separated by a space: ").split()
-
 # Load the configuration data
-if val:
-    X = [[_ for _ in x.split(' ') if len(_)>0] for x in open(os.path.join(val, 'schema.txt'), 'r', encoding = 'utf-8').read().split('\n') if len(x)>0]
+config_file = os.path.join(val, 'schema.txt')
+if os.path.isfile(config_file):
+    X = [[_ for _ in x.split(' ') if len(_)>0] for x in open(config_file, 'r', encoding = 'utf-8').read().split('\n') if len(x)>0]
     X = [a for a in X if len(a)>0]
     X = {x[0]:x[1] for x in X}
     st.write(X)
@@ -43,14 +40,13 @@ else:
     X = None
     st.write("Please enter a valid folder name.")
 
-
 # Load the dataset
-if X and 'TYPE' in X:
-    try:
-        dics = [json.loads(x) for x in open(os.path.join(val, 'dataset_modified.jsonl'), 'r', encoding='utf-8').read().split('\n') if len(x) > 0]
-    except FileNotFoundError:
-        st.write("Couldn't find the dataset file in the specified folder.")
-        dics = None
+data_file = os.path.join(val, 'dataset_modified.jsonl')
+if os.path.isfile(data_file):
+    dics = [json.loads(x) for x in open(data_file, 'r', encoding='utf-8').read().split('\n') if len(x) > 0]
+else:
+    dics = None
+    st.write("Couldn't find the dataset file in the specified folder.")
 
 if X and dics and 'TYPE' in X:
     if X['TYPE'] == 'class':
@@ -67,7 +63,6 @@ if X and dics and 'TYPE' in X:
         st.write("You have already annotated {} documents.".format(len(annotated)))
         dics = [x for x in dics if x['id'] not in annotated]
         time.sleep(1.)
-
 
         i = 0
         while i < len(dics):
@@ -134,4 +129,4 @@ if X and dics and 'TYPE' in X:
 else:
     st.write("Invalid or missing config file.")
 
-st.write("Annotation terminée, merci de renvoyer l'ensemble du dossier pour évaluation.")
+st.write("Annotation terminée, merci de renvoyer l'ensemble du dossier pour évaluation.")    
