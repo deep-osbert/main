@@ -33,18 +33,6 @@ id_annotation = st.text_input("Enter the name of the outcome you will label, wit
 
 highlighted_words = st.text_input("Enter highlighted words separated by a space: ").split()
 
-# Load the config file
-if val:
-    found = True
-    try:
-        with open(os.path.join(val, 'config.json'), 'r') as f:
-            X = json.load(f)
-    except FileNotFoundError:
-        st.write("Couldn't find a config file in the specified folder.")
-        X = None
-else:
-    X = None
-
 # LOAD CONFIGURATION DATA
 if val:
     X = [[_ for _ in x.split(' ') if len(_)>0] for x in open(os.path.join(val, 'schema.txt'), 'r', encoding = 'utf-8').read().split('\n') if len(x)>0]
