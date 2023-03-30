@@ -64,30 +64,33 @@ if X and dics and 'TYPE' in X:
         dics = [x for x in dics if x['id'] not in annotated]
         time.sleep(1.)
 
-        i = 0
-        while i < len(dics):
+        for i, dic in enumerate(dics):
             elapsed_time = time.time() - start_time
             elapsed_time_all += elapsed_time
             st.write("Text {a}/{b}".format(a=i + 1, b=len(dics)))
             st.write(rules)
             st.write('#####################################################')
-            highlighted_text = highlight_text(dics[i]['text'], highlighted_words)
+            highlighted_text = highlight_text(dic['text'], highlighted_words)
             st.write(highlighted_text)
             st.write('#####################################################')
             start_time = time.time()
-            R = st.text_input("Enter your annotation (press 'R' to go back): ", key=f"annotation_input_class_{i}_{uuid.uuid4()}")
-            if R not in possible_hotkeys:
-                continue
-            elif R == 'R':
-                if i > 0:
-                    i -= 1
-                open(file_to_write, 'a', encoding='utf-8').write(
-                    "{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dics[i]['id'], _id_annotation=id_annotation, _annotation=R))
-                continue
-            else:
-                open(file_to_write, 'a', encoding='utf-8').write(
-                    "{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dics[i]['id'], _id_annotation=id_annotation, _annotation=R))
-            i += 1
+            
+            with st.form(key=f'annotation_form_{i}'):
+                R = st.text_input("Enter your annotation (press 'R' to go back): ", key=f"annotation_input_class_{i}_{uuid.uuid4()}")
+                submit_button = st.form_submit_button(label="Submit")
+
+            if submit_button:
+                if R not in possible_hotkeys:
+                    continue
+                elif R == 'R':
+                    if i > 0:
+                        i -= 1
+                    open(file_to_write, 'a', encoding='utf-8').write(
+                        "{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dic['id'], _id_annotation=id_annotation, _annotation=R))
+                    continue
+                else:
+                    open(file_to_write, 'a', encoding='utf-8').write(
+                        "{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dic['id'], _id_annotation=id_annotation, _annotation=R))
             
     elif X['TYPE'] == 'num':
         file_to_write_annotations = os.path.join(val, 'annotations')
@@ -99,34 +102,37 @@ if X and dics and 'TYPE' in X:
         dics = [x for x in dics if x['id'] not in annotated]
         time.sleep(1.)
 
-        i = 0
-        while i < len(dics):
+        for i, dic in enumerate(dics):
             elapsed_time = time.time() - start_time
             elapsed_time_all += elapsed_time
             st.write("Text {a}/{b}".format(a=i, b=len(dics)))
             st.write(rules)
             st.write('#####################################################')
-            highlighted_text = highlight_text(dics[i]['text'], highlighted_words)
+            highlighted_text = highlight_text(dic['text'], highlighted_words)
             st.write(highlighted_text)
             st.write('#####################################################')
             start_time = time.time()
-            R = st.text_input("Enter your annotation (press 'R' to go back): ", key=f"annotation_input_num_{i}_{uuid.uuid4()}")
-            if R == 'R':
-                if i > 0:
-                    i -= 1
-                open(file_to_write_annotations, 'a', encoding='utf-8').write(
-                    "{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dics[i]['id'], _id_annotation=id_annotation, _annotation=R))
-                continue
-            if R != 'N':
-                try:
-                    R = float(R)
-                except ValueError:
-                    continue
-            with open(file_to_write_annotations, 'a', encoding='utf-8') as f:
-                f.write("{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dics[i]['id'], _id_annotation=id_annotation, _annotation=R))
-            i += 1
             
+            with st.form(key=f'annotation_form_{i}'):
+                R = st.text_input("Enter your annotation (press 'R' to go back): ", key=f"annotation_input_num_{i}_{uuid.uuid4()}")
+                submit_button = st.form_submit_button(label="Submit")
+
+            if submit_button:
+                if R == 'R':
+                    if i > 0:
+                        i -= 1
+                    open(file_to_write_annotations, 'a', encoding='utf-8').write(
+                        "{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dic['id'], _id_annotation=id_annotation, _annotation=R))
+                    continue
+                elif R != 'N':
+                    try:
+                        R = float(R)
+                    except ValueError:
+                        continue 
+                with open(file_to_write_annotations, 'a', encoding='utf-8') as f:
+                    f.write("{_id}\t{_id_annotation}\t{_annotation}\n".format(_id=dic['id'], _id_annotation=id_annotation, _annotation=R))
+
 else:
     st.write("Invalid or missing config file.")
 
-st.write("Annotation terminée, merci de renvoyer l'ensemble du dossier pour évaluation.")    
+st.write("Annotation terminée, merci de renvoyer l'ensemble du dossier pour évaluation.")
